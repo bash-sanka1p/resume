@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install LaTeX
         run: sudo apt-get update && sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk
@@ -18,23 +18,27 @@ jobs:
       - name: Build PDF
         run: latexmk -pdf -interaction=nonstopmode -halt-on-error resume.tex
 
+      - name: Rename PDF to index.pdf
+        run: mv resume.pdf index.pdf
+
       - name: Upload PDF Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: resume
-          path: resume.pdf
+          path: index.pdf
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download built PDF
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: resume
+          path: .
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
