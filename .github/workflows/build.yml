@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write   # Needed for pushing to gh-pages
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,8 +15,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install LaTeX
-        run: sudo apt-get update && sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk
+      - name: Install minimal LaTeX
+        run: sudo apt-get update && sudo apt-get install -y \
+             texlive-latex-recommended texlive-latex-extra \
+             texlive-fonts-recommended latexmk
 
       - name: Build PDF
         run: latexmk -pdf -interaction=nonstopmode -halt-on-error resume.tex
